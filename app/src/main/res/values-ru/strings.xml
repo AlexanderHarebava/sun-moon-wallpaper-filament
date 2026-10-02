@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sunrise Wallpaper 3D</string>
+    <string name="wallpaper_label">Sunrise Wallpaper 3D</string>
+    <string name="wallpaper_description">Живые обои: небо, солнце, луна, облака, дождь и снег</string>
+
+    <string name="about_title">О программе</string>
+    <string name="about_app_description">Sunrise Wallpaper 3D - живые обои с динамической сменой времени суток, погодными эффектами (дождь, снег, облака) и поддержкой реальной погоды.</string>
+
+    <string name="privacy_title">Политика конфиденциальности</string>
+    <string name="privacy_text">Приложение Sunrise Wallpaper 3D запрашивает разрешение на доступ к геолокации вашего устройства исключительно для определения вашего текущего местоположения и получения актуальной информации о погоде.\n\n• Мы НЕ собираем, НЕ храним и НЕ передаём третьим лицам данные о вашем местоположении.\n• Координаты используются только локально на вашем устройстве для формирования HTTP-запроса к API погоды.\n• Вся обработка данных происходит непосредственно на вашем устройстве.\n• Приложение не содержит трекеров, аналитики, рекламы и не отправляет никаких данных на серверы разработчика.\n\nЕсли вы отключите функцию «Реальная погода», доступ к геолокации больше не потребуется.</string>
+
+    <string name="author_title">Автор</string>
+    <string name="github_label">GitHub</string>
+
+    <string name="system_time">Системное время</string>
+    <string name="clouds">Облака</string>
+
+    <string name="label_rain">Дождь</string>
+    <string name="label_snow">Снег</string>
+    <string name="label_overcast">Пасмурно</string>
+
+    <string name="state_on">вкл</string>
+    <string name="state_off">выкл</string>
+    <string name="toggle_format">%1$s: %2$s</string>
+
+    <string name="real_weather_enable">Использовать реальную погоду</string>
+    <string name="real_weather_enabled">Реальная погода: вкл</string>
+
+    <string name="install_wallpaper">Установить обои</string>
+
+    <string name="toast_real_weather_requires_location">Для реальной погоды нужен доступ к геолокации</string>
+    <string name="toast_no_location_provider">Нет доступного источника геолокации</string>
+    <string name="toast_no_location_permission">Нет разрешения на геолокацию</string>
+    <string name="toast_location_failed">Не удалось получить местоположение</string>
+    <string name="toast_weather_failed">Не удалось получить погоду</string>
+    <string name="toast_wallpaper_picker_failed">Не удалось открыть выбор обоев</string>
+</resources>

@@ -1,0 +1,24 @@
+material {
+    name : "Clouds",
+    shadingModel : unlit,
+    blending : transparent,
+    depthWrite : false,
+    depthCulling : false,
+    culling : none,
+    flipUV : false,
+    requires : [ uv0 ],
+    parameters : [
+        { type : sampler2d, name : cloudTexture },
+        { type : float4,    name : tintOpacity }
+    ]
+}
+
+fragment {
+void material(inout MaterialInputs material) {
+    prepareMaterial(material);
+
+    highp vec4 c = texture(materialParams_cloudTexture, getUV0());
+    highp vec4 t = materialParams.tintOpacity;
+    material.baseColor = vec4(c.rgb * t.rgb * t.a, c.a * t.a);
+}
+}

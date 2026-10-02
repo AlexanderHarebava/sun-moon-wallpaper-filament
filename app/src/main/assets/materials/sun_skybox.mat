@@ -1,0 +1,145 @@
+material {
+    name : "SunSkybox",
+    shadingModel : unlit,
+    vertexDomain : device,
+    depthWrite : false,
+    depthCulling : false,
+    culling : none,
+    blending : opaque,
+    variables : [
+        { name : eyeDirection, precision : high }
+    ],
+    parameters : [
+        { type : float3, name : sunDir,        precision : high },
+        { type : float,  name : sunRadiusDeg, precision : high },
+        { type : float,  name : sunIntensity, precision : high },
+        { type : float,  name : glowStrength, precision : high },
+        { type : float,  name : sunVisible,   precision : high },
+        { type : float3, name : sunColor,     precision : high },
+        { type : float3, name : skyZenith,    precision : high },
+        { type : float3, name : skyHorizon,   precision : high },
+
+        { type : float3,    name : moonDir,       precision : high },
+        { type : float,     name : moonRadiusDeg, precision : high },
+        { type : float,     name : moonIntensity, precision : high },
+        { type : float,     name : moonVisible,   precision : high },
+        { type : float3,    name : moonColor,     precision : high },
+        { type : sampler2d, name : moonTexture },
+
+        { type : float,     name : starVisibility, precision : high }
+    ]
+}
+
+vertex {
+void materialVertex(inout MaterialVertexInputs material) {
+    material.worldPosition = getPosition();
+    vec3 clipPos = getPosition().xyz;
+    vec3 viewDir = mulMat4x4Float3(getViewFromClipMatrix(), clipPos).xyz;
+    material.eyeDirection.xyz = mulMat3x3Float3(getWorldFromViewMatrix(), viewDir);
+}
+}
+
+fragment {
+
+
+highp float hash13(highp vec3 p) {
+    p = fract(p * 0.1031);
+    p += dot(p, p.yzx + 33.33);
+    return fract((p.x + p.y) * p.z);
+}
+
+
+highp float starField(highp vec3 dir) {
+    highp vec3 q = dir * 90.0;
+    highp vec3 i = floor(q);
+    highp vec3 f = fract(q) - 0.5;
+
+    highp float h = hash13(i);
+    if (h < 0.975) return 0.0;
+
+
+    highp vec3 off = vec3(hash13(i + 1.3), hash13(i + 2.7), hash13(i + 4.1)) - 0.5;
+    highp float d = length(f - off * 0.7);
+
+
+    highp float star = smoothstep(0.14, 0.03, d);
+    highp float brightness = 0.3 + 0.7 * hash13(i + 7.7);
+    return star * brightness;
+}
+
+void material(inout MaterialInputs material) {
+    prepareMaterial(material);
+
+    highp vec3 dir = normalize(variable_eyeDirection.xyz);
+
+
+    highp float h = clamp(dir.y * 0.5 + 0.5, 0.0, 1.0);
+    highp vec3 sky = mix(materialParams.skyHorizon, materialParams.skyZenith, pow(h, 0.2));
+    highp vec3 col = sky;
+
+
+    {
+        highp float vis = clamp(materialParams.starVisibility, 0.0, 1.0);
+        if (vis > 0.001) {
+            highp float s = starField(dir);
+
+            highp float horizonFade = smoothstep(-0.02, 0.15, dir.y);
+
+            highp vec3 starColor = mix(vec3(1.0, 0.95, 0.85),
+                                       vec3(0.85, 0.92, 1.0),
+                                       hash13(dir * 13.7));
+            col += starColor * (s * vis * horizonFade);
+        }
+    }
+
+
+    {
+        highp vec3 sunDir = normalize(materialParams.sunDir);
+        highp float cosA = dot(dir, sunDir);
+        highp float vis = clamp(materialParams.sunVisible, 0.0, 1.0);
+
+        highp float r = radians(materialParams.sunRadiusDeg);
+        highp float cosOut = cos(r);
+        highp float cosIn = cos(r * 0.85);
+        highp float disc = smoothstep(cosOut, cosIn, cosA) * vis;
+
+        highp float ca = max(cosA, 0.0);
+        highp float glow = (pow(ca, 500.0) + pow(ca, 6.0) * 0.25)
+                         * materialParams.glowStrength * vis;
+
+        col += materialParams.sunColor * glow;
+        col = mix(col, materialParams.sunColor * materialParams.sunIntensity, disc);
+    }
+
+
+    {
+        highp vec3 moonDir = normalize(materialParams.moonDir);
+        highp float cosA = dot(dir, moonDir);
+        highp float vis = clamp(materialParams.moonVisible, 0.0, 1.0);
+        highp float r = radians(materialParams.moonRadiusDeg);
+
+        highp vec3 helper = abs(moonDir.y) < 0.99 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+        highp vec3 right = normalize(cross(helper, moonDir));
+        highp vec3 up = cross(moonDir, right);
+
+        highp vec3 rel = dir - moonDir * cosA;
+        highp vec2 uv = vec2(dot(rel, right), dot(rel, up)) / sin(r);
+
+        highp float inside = 1.0 - smoothstep(0.97, 1.0, length(uv));
+
+        highp vec2 texUV = clamp(uv * 0.5 + 0.5, 0.0, 1.0);
+        highp vec4 moonTex = texture(materialParams_moonTexture, texUV);
+
+        highp float texLum = max(max(moonTex.r, moonTex.g), moonTex.b);
+        highp float moonAlpha = smoothstep(0.03, 0.15, texLum) * inside * vis;
+
+        highp float ca = max(cosA, 0.0);
+        highp float glow = pow(ca, 800.0) * 0.02 * vis;
+        col += materialParams.moonColor * glow;
+
+        col = mix(col, moonTex.rgb * materialParams.moonIntensity, moonAlpha);
+    }
+
+    material.baseColor = vec4(col, 1.0);
+}
+}

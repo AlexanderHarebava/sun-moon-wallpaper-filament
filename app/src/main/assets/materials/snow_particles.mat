@@ -1,0 +1,36 @@
+material {
+    name : "SnowParticles",
+    shadingModel : unlit,
+    blending : transparent,
+    depthWrite : false,
+    depthCulling : false,
+    culling : none,
+    flipUV : false,
+    requires : [ uv0 ],
+    parameters : [
+        { type : float3, name : color,       precision : high },
+        { type : float,  name : globalAlpha, precision : high }
+    ]
+}
+
+fragment {
+    void material(inout MaterialInputs material) {
+        prepareMaterial(material);
+
+        highp vec2 uv = getUV0().xy;
+        highp float alpha = clamp(materialParams.globalAlpha, 0.0, 1.0);
+
+
+        highp vec2 p = (uv - 0.5) * 2.0;
+        highp float r = length(p);
+
+
+        highp float circle = 1.0 - smoothstep(0.55, 1.0, r);
+
+        alpha *= circle;
+
+        highp vec3 col = materialParams.color;
+
+        material.baseColor = vec4(col * alpha, alpha);
+    }
+}

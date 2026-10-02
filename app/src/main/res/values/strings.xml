@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sunrise Wallpaper 3D</string>
+    <string name="wallpaper_label">Sunrise Wallpaper 3D</string>
+    <string name="wallpaper_description">live wallpaper: sky, sun, moon, clouds, rain and snow</string>
+
+
+    <string name="about_title">About</string>
+    <string name="about_app_description">Sunrise Wallpaper 3D is a live wallpaper with dynamic time-of-day changes, weather effects (rain, snow, clouds) and real weather support.</string>
+
+    <string name="privacy_title">Privacy Policy</string>
+    <string name="privacy_text">The Sunrise Wallpaper 3D app requests location access only to determine your current location and obtain current weather data.\n\n• We do NOT collect, store, or transfer your location data to third parties.\n• Coordinates are used only locally on your device to form an HTTP request to the weather API.\n• All data processing happens directly on your device.\n• The app contains no trackers, analytics, or ads and does not send any data to developer servers.\n\nIf you disable the Real weather feature, location access is no longer required.</string>
+
+    <string name="author_title">Author</string>
+    <string name="github_label">GitHub</string>
+
+    <string name="system_time">System time</string>
+    <string name="clouds">Clouds</string>
+
+    <string name="label_rain">Rain</string>
+    <string name="label_snow">Snow</string>
+    <string name="label_overcast">Overcast</string>
+
+    <string name="state_on">on</string>
+    <string name="state_off">off</string>
+    <string name="toggle_format">%1$s: %2$s</string>
+
+    <string name="real_weather_enable">Use real weather</string>
+    <string name="real_weather_enabled">Real weather: on</string>
+
+    <string name="install_wallpaper">Set wallpaper</string>
+
+
+    <string name="toast_real_weather_requires_location">Real weather requires location access</string>
+    <string name="toast_no_location_provider">No available location provider</string>
+    <string name="toast_no_location_permission">No location permission</string>
+    <string name="toast_location_failed">Could not get location</string>
+    <string name="toast_weather_failed">Could not fetch weather</string>
+    <string name="toast_wallpaper_picker_failed">Could not open wallpaper picker</string>
+</resources>
