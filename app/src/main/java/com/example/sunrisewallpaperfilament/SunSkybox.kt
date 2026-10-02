@@ -239,7 +239,7 @@ const val SUNRISE_HOUR = 6.0f
 const val SUNSET_HOUR = 18.0f
 
 private const val SUN_MAX_AZIMUTH_DEG = 11.0f
-private const val SUN_MAX_ELEVATION_DEG = 12.0f
+private const val SUN_MAX_ELEVATION_DEG = 17.5f
 private val ELEVATION_FULL_NOON = (12.0 * PI / 180.0).toFloat()
 
 
